@@ -3,14 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Model;
 
-public class Priority
+public class PriorityEntity
 {
-    public Priority()
-    {
-        Tasks = new List<Task>();
-    }
-
+    [Key]
     public int PriorityId { get; set; }
+
+    public PriorityEntity()
+    {
+        Tasks = new List<TaskEntity>();
+    }
 
     [Required, MaxLength(20)]
     public string PriorityName { get; set; } = string.Empty;
@@ -18,5 +19,5 @@ public class Priority
     [Required]
     public int PriorityLevel { get; set; }
 
-    public ICollection<Task> Tasks { get; set; }
+    public ICollection<TaskEntity> Tasks { get; set; }
 }
