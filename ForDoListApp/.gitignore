@@ -1,0 +1,51 @@
+## Ignore build output
+bin/
+obj/
+[Bb]uild/
+[Ll]og/
+*.log
+
+## User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## ASP.NET Scaffolding
+ScaffoldingReadMe.txt
+
+## Rider
+.idea/
+*.sln.iml
+
+## Visual Studio
+.vs/
+.vscode/
+
+## Temporary files
+*.tmp
+*.temp
+*.bak
+*.swp
+
+## IIS/ASP.NET
+*.dbmdl
+*.pdb
+
+## Static assets output
+wwwroot/lib/
+wwwroot/dist/
+
+## Node.js (if used)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+## Environment & secrets
+.env
+.env.*
+
+## macOS & Windows system files
+.DS_Store
+Thumbs.db
+desktop.ini
