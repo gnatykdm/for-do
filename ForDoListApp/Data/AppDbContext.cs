@@ -2,51 +2,54 @@ using Microsoft.EntityFrameworkCore;
 using Enums;
 using Model;
 
-namespace ForDoListApp.Data;
-
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+namespace ForDoListApp.Data
 {
-    public DbSet<User> Users => Set<User>();
-    public DbSet<Category> Categories => Set<Category>();
-    public DbSet<Priority> Priorities => Set<Priority>();
-    public DbSet<Model.Task> Tasks => Set<Model.Task>();
-    public DbSet<TaskHistory> TaskHistories => Set<TaskHistory>();
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public class AppDbContext : DbContext
     {
-        base.OnModelCreating(modelBuilder);
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        modelBuilder.HasPostgresEnum<TaskColor>();
-        modelBuilder.HasPostgresEnum<Enums.TaskStatus>();
+        public DbSet<UserEntity> Users => Set<UserEntity>();
+        public DbSet<CategoryEntity> Categories => Set<CategoryEntity>();
+        public DbSet<PriorityEntity> Priorities => Set<PriorityEntity>();
+        public DbSet<TaskEntity> Tasks => Set<TaskEntity>();
+        public DbSet<TaskHistoryEntity> TaskHistories => Set<TaskHistoryEntity>();
 
-        modelBuilder.Entity<Model.Task>()
-            .HasOne(t => t.User)
-            .WithMany(u => u.Tasks)
-            .HasForeignKey(t => t.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        modelBuilder.Entity<Model.Task>()
-            .HasOne(t => t.Category)
-            .WithMany(c => c.Tasks)
-            .HasForeignKey(t => t.CategoryId)
-            .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.HasPostgresEnum<TaskColor>();
+            modelBuilder.HasPostgresEnum<Enums.TaskStatus>();
 
-        modelBuilder.Entity<Model.Task>()
-            .HasOne(t => t.Priority)
-            .WithMany(p => p.Tasks)
-            .HasForeignKey(t => t.PriorityId)
-            .OnDelete(DeleteBehavior.SetNull);
+            modelBuilder.Entity<TaskEntity>()
+                .HasOne(t => t.User)
+                .WithMany(u => u.UserTasks)
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
 
-        modelBuilder.Entity<TaskHistory>()
-            .HasOne(th => th.Task)
-            .WithMany(t => t.TaskHistories)
-            .HasForeignKey(th => th.TaskId)
-            .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<TaskEntity>()
+                .HasOne(t => t.Category)
+                .WithMany(c => c.Tasks)
+                .HasForeignKey(t => t.CategoryId)
+                .OnDelete(DeleteBehavior.SetNull);
 
-        modelBuilder.Entity<TaskHistory>()
-            .HasOne(th => th.User)
-            .WithMany(u => u.TaskHistories)
-            .HasForeignKey(th => th.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<TaskEntity>()
+                .HasOne(t => t.Priority)
+                .WithMany(p => p.Tasks)
+                .HasForeignKey(t => t.PriorityId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<TaskHistoryEntity>()
+                .HasOne(th => th.Task)
+                .WithMany(t => t.TaskHistories)
+                .HasForeignKey(th => th.TaskId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<TaskHistoryEntity>()
+                .HasOne(th => th.User)
+                .WithMany(u => u.TaskHistories)
+                .HasForeignKey(th => th.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }
