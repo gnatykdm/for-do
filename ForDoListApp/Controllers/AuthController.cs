@@ -1,7 +1,7 @@
 using ForDoListApp.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Model;
-using Models.Service;
+using Models.Service.User;
 
 namespace ForDoListApp.Controllers
 {

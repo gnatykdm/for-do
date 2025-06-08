@@ -2,7 +2,7 @@ using System;
 using Model;
 using System.Collections;
 
-namespace Models.Service
+namespace Models.User.Service
 {
     public interface IUserService
     {

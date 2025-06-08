@@ -1,6 +1,10 @@
 using ForDoListApp.Data;
 using Microsoft.EntityFrameworkCore;
-using Models.Service;
+using Models.Service.Category;
+using Models.Service.History;
+using Models.Service.Priority;
+using Models.Service.Task;
+using Models.Service.User;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +18,10 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ITaskHistoryService, HistoryService>();
+builder.Services.AddScoped<IPriorityService, PriorityService>();
+builder.Services.AddScoped<ITaskService, TaskService>();
 
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())
