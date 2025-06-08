@@ -1,5 +1,6 @@
 using ForDoListApp.Data;
 using Microsoft.EntityFrameworkCore;
+using Models.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,8 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString)
 );
+
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 if (!app.Environment.IsDevelopment())

@@ -13,7 +13,6 @@ namespace ForDoListApp.Data
         {
             context.Database.Migrate();
 
-            // Seed Users
             if (!context.Users.Any())
             {
                 var user1 = new UserEntity
@@ -35,7 +34,6 @@ namespace ForDoListApp.Data
                 context.Users.AddRange(user1, user2);
                 context.SaveChanges();
 
-                // Seed Categories
                 var category1 = new CategoryEntity
                 {
                     UserId = user1.UserId,
@@ -50,7 +48,6 @@ namespace ForDoListApp.Data
 
                 context.Categories.AddRange(category1, category2);
 
-                // Seed Priorities
                 var priorityLow = new PriorityEntity
                 {
                     PriorityName = "Low",
@@ -71,7 +68,6 @@ namespace ForDoListApp.Data
 
                 context.SaveChanges();
 
-                // Seed Tasks
                 var task1 = new Model.TaskEntity
                 {
                     UserId = user1.UserId,
@@ -103,7 +99,6 @@ namespace ForDoListApp.Data
                 context.Tasks.AddRange(task1, task2);
                 context.SaveChanges();
 
-                // Seed TaskHistory
                 var history1 = new TaskHistoryEntity
                 {
                     TaskId = task1.TaskId,
