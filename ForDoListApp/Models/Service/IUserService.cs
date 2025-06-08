@@ -10,5 +10,8 @@ namespace Models.Service
         void UpdateUser(UserEntity user);
         UserEntity? GetUserById(int id);
         List<UserEntity>? GetAllUsers();
+
+        bool findUserByEmail(string email);
+        bool findUserByUserName(string userName);
     }
 }

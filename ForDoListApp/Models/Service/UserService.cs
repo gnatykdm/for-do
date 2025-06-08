@@ -72,5 +72,27 @@ namespace Models.Service
 
             return users ?? new List<UserEntity>();
         }
+
+        public bool findUserByUserName(string userName)
+        {
+            if (string.IsNullOrEmpty(userName))
+            {
+                _logger.LogError("User[findUserByEmail] - username is null or empty.");
+                return false;
+            }
+
+            return _context.Users.Any(u => u.Username == userName);
+        }
+
+        public bool findUserByEmail(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                _logger.LogError("User[findUserByEmail] - email is null or empty.");
+                return false;
+            }
+
+            return _context.Users.Any(u => u.Email == email);
+        }
     }
 }
