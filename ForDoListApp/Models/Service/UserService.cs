@@ -60,13 +60,14 @@ namespace Models.Service
             return user;
         }
 
-        public List<UserEntity> GetAllUsers()
+        public List<UserEntity>? GetAllUsers()
         {
             var users = _context.Users.ToList();
 
             if (users == null || users.Count == 0)
             {
                 _logger.LogWarning("User[GetAllUsers] - user list is empty.");
+                return null;
             }
 
             return users ?? new List<UserEntity>();

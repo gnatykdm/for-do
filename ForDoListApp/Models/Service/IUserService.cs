@@ -8,7 +8,7 @@ namespace Models.Service
     {
         void SaveUser(UserEntity user);
         void UpdateUser(UserEntity user);
-        UserEntity GetUserById(int id);
-        List<UserEntity> GetAllUsers();
+        UserEntity? GetUserById(int id);
+        List<UserEntity>? GetAllUsers();
     }
 }
