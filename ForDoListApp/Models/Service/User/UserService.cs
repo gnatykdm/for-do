@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using ForDoListApp.Data;
 using Model;
 
-namespace Models.Service
+namespace Models.Service.User
 {
     public class UserService : IUserService
     {
