@@ -2950,11 +2950,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\User\\Desktop\\UNIV\\for-do\\ForDoListApp\\ForDoListApp.csproj",
+      "projectUniqueName": "C:\\Users\\User\\Desktop\\for-do\\ForDoListApp\\ForDoListApp.csproj",
       "projectName": "ForDoListApp",
-      "projectPath": "C:\\Users\\User\\Desktop\\UNIV\\for-do\\ForDoListApp\\ForDoListApp.csproj",
+      "projectPath": "C:\\Users\\User\\Desktop\\for-do\\ForDoListApp\\ForDoListApp.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\User\\Desktop\\UNIV\\for-do\\ForDoListApp\\obj\\",
+      "outputPath": "C:\\Users\\User\\Desktop\\for-do\\ForDoListApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"

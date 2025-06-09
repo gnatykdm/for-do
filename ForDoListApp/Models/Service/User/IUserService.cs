@@ -1,8 +1,8 @@
 using System;
-using Model;
+using Models.Entity;
 using System.Collections;
 
-namespace Models.User.Service
+namespace Models.Service.User
 {
     public interface IUserService
     {

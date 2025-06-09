@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ForDoListApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250526082222_InitialCreate")]
+    [Migration("20250609085237_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -23,55 +23,12 @@ namespace ForDoListApp.Migrations
                 .HasAnnotation("ProductVersion", "9.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "task_color", new[] { "red", "green", "yellow", "purple", "blue" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "task_status", new[] { "pending", "in_progress", "completed" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "task_category_enum", new[] { "work", "personal", "shopping", "study", "other" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "task_priority_enum", new[] { "low", "medium", "high" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "task_status_enum", new[] { "pending", "completed" });
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Model.CategoryEntity", b =>
-                {
-                    b.Property<int>("CategoryId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("CategoryId"));
-
-                    b.Property<string>("CategoryName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("CategoryId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Model.PriorityEntity", b =>
-                {
-                    b.Property<int>("PriorityId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("PriorityId"));
-
-                    b.Property<int>("PriorityLevel")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("PriorityName")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.HasKey("PriorityId");
-
-                    b.ToTable("Priorities");
-                });
-
-            modelBuilder.Entity("Model.TaskEntity", b =>
+            modelBuilder.Entity("Models.Entity.TaskEntity", b =>
                 {
                     b.Property<int>("TaskId")
                         .ValueGeneratedOnAdd()
@@ -79,26 +36,35 @@ namespace ForDoListApp.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("TaskId"));
 
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int?>("CategoryId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Color")
-                        .HasColumnType("integer");
-
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<DateTime?>("DueDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("Priority")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int?>("PriorityId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("TaskDescription")
-                        .HasColumnType("text");
+                        .HasMaxLength(1000)
+                        .HasColumnType("character varying(1000)");
 
                     b.Property<string>("TaskTitle")
                         .IsRequired()
@@ -106,23 +72,21 @@ namespace ForDoListApp.Migrations
                         .HasColumnType("character varying(100)");
 
                     b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
 
                     b.HasKey("TaskId");
 
-                    b.HasIndex("CategoryId");
-
-                    b.HasIndex("PriorityId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Tasks");
                 });
 
-            modelBuilder.Entity("Model.TaskHistoryEntity", b =>
+            modelBuilder.Entity("Models.Entity.TaskHistoryEntity", b =>
                 {
                     b.Property<int>("HistoryId")
                         .ValueGeneratedOnAdd()
@@ -136,7 +100,9 @@ namespace ForDoListApp.Migrations
                         .HasColumnType("character varying(255)");
 
                     b.Property<DateTime>("ChangedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("timestamp with time zone")
+                        .HasDefaultValueSql("CURRENT_TIMESTAMP");
 
                     b.Property<int>("TaskId")
                         .HasColumnType("integer");
@@ -153,7 +119,7 @@ namespace ForDoListApp.Migrations
                     b.ToTable("TaskHistories");
                 });
 
-            modelBuilder.Entity("Model.UserEntity", b =>
+            modelBuilder.Entity("Models.Entity.UserEntity", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -173,7 +139,7 @@ namespace ForDoListApp.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Username")
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("character varying(50)");
@@ -183,51 +149,26 @@ namespace ForDoListApp.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Model.CategoryEntity", b =>
+            modelBuilder.Entity("Models.Entity.TaskEntity", b =>
                 {
-                    b.HasOne("Model.UserEntity", "User")
-                        .WithMany("Categories")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Model.TaskEntity", b =>
-                {
-                    b.HasOne("Model.CategoryEntity", "Category")
-                        .WithMany("Tasks")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Model.PriorityEntity", "Priority")
-                        .WithMany("Tasks")
-                        .HasForeignKey("PriorityId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Model.UserEntity", "User")
+                    b.HasOne("Models.Entity.UserEntity", "User")
                         .WithMany("UserTasks")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-
-                    b.Navigation("Priority");
-
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Model.TaskHistoryEntity", b =>
+            modelBuilder.Entity("Models.Entity.TaskHistoryEntity", b =>
                 {
-                    b.HasOne("Model.TaskEntity", "Task")
+                    b.HasOne("Models.Entity.TaskEntity", "Task")
                         .WithMany("TaskHistories")
                         .HasForeignKey("TaskId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Model.UserEntity", "User")
+                    b.HasOne("Models.Entity.UserEntity", "User")
                         .WithMany("TaskHistories")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -238,25 +179,13 @@ namespace ForDoListApp.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Model.CategoryEntity", b =>
-                {
-                    b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("Model.PriorityEntity", b =>
-                {
-                    b.Navigation("Tasks");
-                });
-
-            modelBuilder.Entity("Model.TaskEntity", b =>
+            modelBuilder.Entity("Models.Entity.TaskEntity", b =>
                 {
                     b.Navigation("TaskHistories");
                 });
 
-            modelBuilder.Entity("Model.UserEntity", b =>
+            modelBuilder.Entity("Models.Entity.UserEntity", b =>
                 {
-                    b.Navigation("Categories");
-
                     b.Navigation("TaskHistories");
 
                     b.Navigation("UserTasks");

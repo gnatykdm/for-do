@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using ForDoListApp.Data;
-using Model;
+using Models.Entity;
 
 namespace Models.Service.User
 {
@@ -27,7 +27,7 @@ namespace Models.Service.User
 
             _context.Users.Add(user);
             _context.SaveChanges();
-            _logger.LogInformation("User[Save] - {Username} was saved.", user.Username);
+            _logger.LogInformation("User[Save] - {Username} was saved.", user.UserName);
         }
 
         public void UpdateUser(UserEntity user)
@@ -40,7 +40,7 @@ namespace Models.Service.User
 
             _context.Users.Update(user);
             _context.SaveChanges();
-            _logger.LogInformation("User[Update] - {Username} was updated.", user.Username);
+            _logger.LogInformation("User[Update] - {Username} was updated.", user.UserName);
         }
 
         public UserEntity? GetUserById(int id)
@@ -81,7 +81,7 @@ namespace Models.Service.User
                 return false;
             }
 
-            return _context.Users.Any(u => u.Username == userName);
+            return _context.Users.Any(u => u.UserName == userName);
         }
 
         public bool findUserByEmail(string email)

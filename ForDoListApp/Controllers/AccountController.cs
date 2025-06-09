@@ -1,26 +1,32 @@
 using ForDoListApp.Utils;
 using Microsoft.AspNetCore.Mvc;
-using Model;
+using Models.Entity;
 using Models.Service.User;
 
-namespace ForDoListApp.Controllers
+namespace Controllers
 {
-    [Route("auth")]
-    public class AuthController(IUserService userService, ILogger<AuthController> logger) : Controller
+    public class AccountController(IUserService userService, ILogger<AccountController> logger) : Controller
     {
         private readonly IUserService _userService = userService;
-        private readonly ILogger<AuthController> _logger = logger;
+        private readonly ILogger<AccountController> _logger = logger;
         private readonly HashPassword _hashPassword = new HashPassword();
 
         private readonly int DEFAULT_LENGTH = 4;
 
-        [HttpGet("login")]
+        [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
 
-        [HttpPost("login")]
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
         public IActionResult Login(string username, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
@@ -42,7 +48,7 @@ namespace ForDoListApp.Controllers
                 return View();
             }
 
-            var user = users.FirstOrDefault(u => u.Username == username);
+            var user = users.FirstOrDefault(u => u.UserName == username);
 
             if (user == null)
             {
@@ -56,13 +62,7 @@ namespace ForDoListApp.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpGet("register")]
-        public IActionResult Register()
-        {
-            return View();
-        }
-
-        [HttpPost("register")]
+        [HttpPost]
         public IActionResult Register(string username, string email, string password)
         {
             if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(email))
@@ -100,7 +100,7 @@ namespace ForDoListApp.Controllers
                 return View();
             }
 
-            var existing = users.FirstOrDefault(u => u.Username == username);
+            var existing = users.FirstOrDefault(u => u.UserName == username);
 
             if (existing != null)
             {
@@ -110,7 +110,7 @@ namespace ForDoListApp.Controllers
 
             var newUser = new UserEntity
             {
-                Username = username,
+                UserName = username,
                 Email = email,
                 PasswordHash = _hashPassword.HashPasswordSHA256(password)
             };
@@ -121,7 +121,7 @@ namespace ForDoListApp.Controllers
             return RedirectToAction("Login");
         }
 
-        [HttpPost("logout")]
+        [HttpPost]
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();

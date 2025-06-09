@@ -1,17 +1,25 @@
-namespace Enums;
-
-public enum TaskColor
+namespace Models.Entity.Enums
 {
-    Red,
-    Green,
-    Yellow,
-    Purple,
-    Blue
-}
+    public enum TaskStatusEnum
+    {
+        PENDING,
+        IN_PROGRESS,
+        COMPLETED
+    }
 
-public enum TaskStatus
-{
-    Pending,
-    InProgress,
-    Completed
+    public enum TaskPriorityEnum
+    {
+        LOW,
+        MEDIUM,
+        HIGH
+    }
+
+    public enum TaskCategoryEnum
+    {
+        WORK,
+        PERSONAL,
+        SHOPPING,
+        STUDY,
+        OTHER
+    }
 }

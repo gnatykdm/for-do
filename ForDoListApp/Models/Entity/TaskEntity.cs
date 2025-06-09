@@ -1,50 +1,35 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using Enums;
-using TaskColorEnum = Enums.TaskColor;
-using TaskStatusEnum = Enums.TaskStatus;
+using Models.Entity.Enums;
 
-namespace Model;
-
-public class TaskEntity
+namespace Models.Entity
 {
-    [Key]
-    public int TaskId { get; set; }
-    
-    public TaskEntity()
+    public class TaskEntity
     {
-        TaskHistories = new List<TaskHistoryEntity>();
+        [Key]
+        public int TaskId { get; set; }
+
+        [Required]
+        public int UserId { get; set; }
+
+        [Required, MaxLength(100)]
+        public string TaskTitle { get; set; } = string.Empty;
+
+        public string? TaskDescription { get; set; }
+
+        public DateTime? DueDate { get; set; }
+
+        public TaskStatusEnum Status { get; set; } = TaskStatusEnum.PENDING;
+
+        public TaskPriorityEnum Priority { get; set; } = TaskPriorityEnum.LOW;
+
+        public TaskCategoryEnum Category { get; set; } = TaskCategoryEnum.PERSONAL;
+
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+        public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+
+        public UserEntity? User { get; set; } 
     }
-
-    [Required]
-    public int UserId { get; set; }
-
-    public int? CategoryId { get; set; }
-
-    public int? PriorityId { get; set; }
-
-    [Required, MaxLength(100)]
-    public string TaskTitle { get; set; } = string.Empty;
-
-    public string? TaskDescription { get; set; }
-
-    public TaskColor Color { get; set; } = TaskColor.Purple;
-
-    public DateTime? DueDate { get; set; }
-
-    public Enums.TaskStatus Status { get; set; } = Enums.TaskStatus.Pending;
-
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-
-    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
-
-    // Navigation properties
-    public UserEntity User { get; set; } = null!;
-
-    public CategoryEntity? Category { get; set; }
-
-    public PriorityEntity? Priority { get; set; }
-
-    public ICollection<TaskHistoryEntity> TaskHistories { get; set; }
 }

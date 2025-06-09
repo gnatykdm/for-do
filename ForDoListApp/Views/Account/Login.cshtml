@@ -21,7 +21,7 @@
             <div class="error-message">@ViewBag.Error</div>
         }
 
-        <form method="post" action="/auth/login">
+        <form asp-action="Login" asp-controller="Account" method="post">
             <div class="mb-3">
                 <label for="InputUsername" class="form-label">Username</label>
                 <input type="text" class="form-control" id="InputUsername" name="username" required />
@@ -33,7 +33,7 @@
             <button type="submit" class="btn btn-primary w-100">Log In</button>
         </form>
         <div class="mt-3 text-center">
-            <span>Don't have an account? <a href="/auth/register">Register here</a></span>
+            <span>Don't have an account? <a href="/Account/Register">Register here</a></span>
         </div>
     </div>
 

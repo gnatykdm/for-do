@@ -1,8 +1,5 @@
 using ForDoListApp.Data;
 using Microsoft.EntityFrameworkCore;
-using Models.Service.Category;
-using Models.Service.History;
-using Models.Service.Priority;
 using Models.Service.Task;
 using Models.Service.User;
 
@@ -18,12 +15,19 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 );
 
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-builder.Services.AddScoped<ITaskHistoryService, HistoryService>();
-builder.Services.AddScoped<IPriorityService, PriorityService>();
 builder.Services.AddScoped<ITaskService, TaskService>();
 
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
 var app = builder.Build();
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -33,12 +37,17 @@ if (!app.Environment.IsDevelopment())
 using (var scope = app.Services.CreateScope())
 {
     var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    DbSeeder.Seed(dbContext);
+    DbSeeder.SeedAll(dbContext); 
 }
 
 app.UseHttpsRedirection();
+app.UseStaticFiles(); 
+
 app.UseRouting();
 
+app.UseSession(); 
+
+app.UseAuthentication(); 
 app.UseAuthorization();
 
 app.MapStaticAssets();
